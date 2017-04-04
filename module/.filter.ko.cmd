@@ -1,0 +1,1 @@
+cmd_/home/user/文档/毕业设计备份7/module/filter.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/user/文档/毕业设计备份7/module/filter.ko /home/user/文档/毕业设计备份7/module/filter.o /home/user/文档/毕业设计备份7/module/filter.mod.o

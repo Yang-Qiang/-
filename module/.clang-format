@@ -1,0 +1,19 @@
+AlignAfterOpenBracket: Align
+AlignTrailingComments: true
+
+BinPackArguments: false
+BinPackParameters: false
+BasedOnStyle: Google
+
+ColumnLimit: 110
+
+IndentWidth: 4
+
+SpaceAfterCStyleCast: true
+
+
+BreakBeforeBraces: Custom
+BraceWrapping: {AfterFunction: false, BeforeElse: true}
+# BraceWrapping: {BeforeElse: true}
+
+PointerAlignment: Left
