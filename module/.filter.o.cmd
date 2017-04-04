@@ -1,1 +1,0 @@
-cmd_/home/user/文档/毕业设计备份7/module/filter.o := ld -m elf_x86_64   -r -o /home/user/文档/毕业设计备份7/module/filter.o /home/user/文档/毕业设计备份7/module/module.o /home/user/文档/毕业设计备份7/module/file.o /home/user/文档/毕业设计备份7/module/check.o ; scripts/mod/modpost /home/user/文档/毕业设计备份7/module/filter.o
