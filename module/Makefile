@@ -7,7 +7,7 @@ obj-m += filter.o
 filter-objs := module.o file.o check.o
 
 #内核代码所在的路径
-LINUX_KERNEL_PATH :=/usr/src/kernels/3.10.0-514.el7.x86_64
+LINUX_KERNEL_PATH :=/usr/src/kernels/3.10.0-514.10.2.el7.x86_64
 
 #编译
 all:

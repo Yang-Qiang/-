@@ -1,12 +1,13 @@
+
 #include "check.h"
 #include <linux/kernel.h>
-#include <linux/netfilter.h>
-#include <linux/netfilter_ipv4.h>
 #include <linux/skbuff.h>
 #include "linux_in.h"
 #include "linux_ip.h"
 #include "linux_tcp.h"
 #include "linux_udp.h"
+#include "netfilter.h"
+#include "netfilter_ipv4.h"
 
 extern unsigned int* deny_ip;      // defined in module.c
 extern unsigned short* deny_port;  // define in module.c

@@ -10,8 +10,6 @@ extern unsigned short* deny_port;
 extern int flag;
 int mem_open(struct inode* inode, struct file* filp) { return 0; }
 
-
-
 int mem_release(struct inode* inode, struct file* filp) { return 0; }
 
 long memdev_ioctl(struct file* filp, unsigned int cmd, unsigned long arg) {

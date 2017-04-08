@@ -1,7 +1,6 @@
 #ifndef _LINUX_IN_H
 #define _LINUX_IN_H
 
-/* Standard well-defined IP protocols.  */
 enum {
     IPPROTO_IP = 0, /* Dummy protocol for TCP		*/
 #define IPPROTO_IP IPPROTO_IP
