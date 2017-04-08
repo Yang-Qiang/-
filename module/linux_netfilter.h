@@ -9,31 +9,76 @@
 #include <linux/in6.h>
 #include <linux/wait.h>
 #include <linux/list.h>
-#include <uapi/linux/netfilter.h>
+
+#include <linux/types.h>
+#include <linux/compiler.h>
+#include <linux/sysctl.h>
+
+
+/* Responses from hook functions. */
+#define NF_DROP 0
+#define NF_ACCEPT 1
+#define NF_STOLEN 2
+#define NF_QUEUE 3
+#define NF_REPEAT 4
+#define NF_STOP 5
+#define NF_MAX_VERDICT NF_STOP
+
+/* we overload the higher bits for encoding auxiliary data such as the queue
+ * number or errno values. Not nice, but better than additional function
+ * arguments. */
+#define NF_VERDICT_MASK 0x000000ff
+
+/* extra verdict flags have mask 0x0000ff00 */
+#define NF_VERDICT_FLAG_QUEUE_BYPASS	0x00008000
+
+/* queue number (NF_QUEUE) or errno (NF_DROP) */
+#define NF_VERDICT_QMASK 0xffff0000
+#define NF_VERDICT_QBITS 16
+
+#define NF_QUEUE_NR(x) ((((x) << 16) & NF_VERDICT_QMASK) | NF_QUEUE)
+
+#define NF_DROP_ERR(x) (((-x) << 16) | NF_DROP)
+
+/* only for userspace compatibility */
+#ifndef __KERNEL__
+/* Generic cache responses from hook functions.
+   <= 0x2000 is used for protocol-flags. */
+#define NFC_UNKNOWN 0x4000
+#define NFC_ALTERED 0x8000
+
+/* NF_VERDICT_BITS should be 8 now, but userspace might break if this changes */
+#define NF_VERDICT_BITS 16
+#endif
+
+enum nf_inet_hooks {
+	NF_INET_PRE_ROUTING,
+	NF_INET_LOCAL_IN,
+	NF_INET_FORWARD,
+	NF_INET_LOCAL_OUT,
+	NF_INET_POST_ROUTING,
+	NF_INET_NUMHOOKS
+};
+
+enum {
+	NFPROTO_UNSPEC =  0,
+	NFPROTO_INET   =  1,
+	NFPROTO_IPV4   =  2,
+	NFPROTO_ARP    =  3,
+	NFPROTO_BRIDGE =  7,
+	NFPROTO_IPV6   = 10,
+	NFPROTO_DECNET = 12,
+	NFPROTO_NUMPROTO,
+};
+
+
+
 #ifdef CONFIG_NETFILTER
 static inline int NF_DROP_GETERR(int verdict)
 {
 	return -(verdict >> NF_VERDICT_QBITS);
 }
 
-static inline int nf_inet_addr_cmp(const union nf_inet_addr *a1,
-				   const union nf_inet_addr *a2)
-{
-	return a1->all[0] == a2->all[0] &&
-	       a1->all[1] == a2->all[1] &&
-	       a1->all[2] == a2->all[2] &&
-	       a1->all[3] == a2->all[3];
-}
-
-static inline void nf_inet_addr_mask(const union nf_inet_addr *a1,
-				     union nf_inet_addr *result,
-				     const union nf_inet_addr *mask)
-{
-	result->all[0] = a1->all[0] & mask->all[0];
-	result->all[1] = a1->all[1] & mask->all[1];
-	result->all[2] = a1->all[2] & mask->all[2];
-	result->all[3] = a1->all[3] & mask->all[3];
-}
 
 int netfilter_init(void);
 
@@ -199,22 +244,7 @@ static inline int nf_hook(u_int8_t pf, unsigned int hook, struct sock *sk,
 	return nf_hook_thresh(pf, hook, sk, skb, indev, outdev, okfn, INT_MIN);
 }
                    
-/* Activate hook; either okfn or kfree_skb called, unless a hook
-   returns NF_STOLEN (in which case, it's up to the hook to deal with
-   the consequences).
 
-   Returns -ERRNO if packet dropped.  Zero means queued, stolen or
-   accepted.
-*/
-
-/* RR:
-   > I don't want nf_hook to return anything because people might forget
-   > about async and trust the return value to mean "packet was ok".
-
-   AK:
-   Just document it clearly, then you can expect some sense from kernel
-   coders :)
-*/
 
 static inline int
 NF_HOOK_THRESH(uint8_t pf, unsigned int hook, struct sock *sk,
@@ -261,9 +291,6 @@ int compat_nf_getsockopt(struct sock *sk, u_int8_t pf, int optval,
 		char __user *opt, int *len);
 #endif
 
-/* Call this before modifying an existing packet: ensures it is
-   modifiable and linear to the point you care about (writable_len).
-   Returns true or false. */
 int skb_make_writable(struct sk_buff *skb, unsigned int writable_len);
 
 struct flowi;
