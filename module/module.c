@@ -1,6 +1,6 @@
 // Created by yq on 17-2-21.
 //
-#include "module.h"
+
 #include <asm/errno.h>
 #include <linux/cdev.h>
 #include <linux/device.h>
@@ -10,13 +10,14 @@
 
 #include <linux/net.h>
 #include <linux/netdevice.h>
-#include "linux_netfilter.h"
-#include "linux_netfilter_ipv4.h"
 #include <linux/slab.h>    //kmalloc>
 #include <linux/string.h>  //memset
 #include "check.h"
 #include "file.h"
 #include "linux_in.h"
+#include "linux_netfilter.h"
+#include "linux_netfilter_ipv4.h"
+#include "module.h"
 
 unsigned int *deny_ip = NULL;
 unsigned short *deny_port = NULL;
@@ -52,7 +53,8 @@ unsigned int packet_filter(unsigned int hooknum,
         if (ret != NF_ACCEPT) {
             return ret;
         }
-    } else if (flag == 1) {
+    }
+    else if (flag == 1) {
         ret = check_port_packet(skb);
         if (ret != NF_ACCEPT) return ret;
     }
@@ -60,11 +62,12 @@ unsigned int packet_filter(unsigned int hooknum,
     return NF_ACCEPT;
 }
 
-static struct nf_hook_ops packet_filter_opt = {.hook = packet_filter,
-                                               // .owner = THIS_MODULE,
-                                               .pf = PF_INET,                  /*IPv4 protocol hook*/
-                                               .hooknum = NF_INET_PRE_ROUTING, /*First stage hook*/
-                                               .priority = NF_IP_PRI_FIRST,    /*Hook to come first*/
+static struct nf_hook_ops packet_filter_opt = {
+    .hook = packet_filter,
+    // .owner = THIS_MODULE,
+    .pf = PF_INET,                  /*IPv4 protocol hook*/
+    .hooknum = NF_INET_PRE_ROUTING, /*First stage hook*/
+    .priority = NF_IP_PRI_FIRST,    /*Hook to come first*/
 };
 
 /*netfilter init module */
@@ -76,7 +79,8 @@ static int filter_init(void) {
     /*Regiser the control device, /dev/netfilter */
     if (mem_major) {
         result = register_chrdev_region(devno, 1, "filter");
-    } else {
+    }
+    else {
         result = alloc_chrdev_region(&devno, 0, 1, "filter");
         mem_major = MAJOR(devno);
     }
@@ -105,8 +109,8 @@ static int filter_init(void) {
     // register hook
     printk(KERN_DEBUG "netfilter: Network hooks successfully installed.\n");
 
-    deny_ip = (unsigned int *)kmalloc(sizeof(unsigned int) * MAX_NR, GFP_KERNEL);
-    deny_port = (unsigned short *)kmalloc(sizeof(unsigned short) * MAX_NR, GFP_KERNEL);
+    deny_ip = (unsigned int *) kmalloc(sizeof(unsigned int) * MAX_NR, GFP_KERNEL);
+    deny_port = (unsigned short *) kmalloc(sizeof(unsigned short) * MAX_NR, GFP_KERNEL);
 
     if ((deny_ip == NULL) || (deny_port == NULL)) {
         return -ENOMEM;  // ENOMEM：Out of memory
