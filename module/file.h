@@ -1,5 +1,5 @@
-#ifndef _FILE
-#define _FILE
+#ifndef _FILE_H
+#define _FILE_H
 #include <linux/fs.h>
 
 int mem_open(struct inode* inode, struct file* filp);

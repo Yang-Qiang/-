@@ -1,9 +1,8 @@
-#ifndef __LINUX_NETFILTER_H
-#define __LINUX_NETFILTER_H
+#ifndef _NETFILTER_H
+#define _NETFILTER_H
 
 #include <linux/if.h>
 #include <linux/in.h>
-#include <linux/in6.h>
 #include <linux/init.h>
 #include <linux/list.h>
 #include <linux/net.h>
@@ -12,7 +11,7 @@
 #include <linux/types.h>
 #include <linux/compiler.h>
 #include <linux/sysctl.h>
-
+#include <linux/kernel.h>
 
 /* Responses from hook functions. */
 #define NF_DROP 0

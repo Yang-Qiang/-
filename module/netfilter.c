@@ -9,12 +9,12 @@
 #include <linux/wait.h>
 
 
-#include "linux_in.h"
-#include "linux_netfilter.h"
+#include "in.h"
+#include "netfilter.h"
 
 
 
-static inline void nf_hook_state_init(struct nf_hook_state *p,
+inline void nf_hook_state_init(struct nf_hook_state *p,
                                       unsigned int hook,
                                       int thresh,
                                       u_int8_t pf,

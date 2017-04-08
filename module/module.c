@@ -1,5 +1,3 @@
-// Created by yq on 17-2-21.
-//
 
 #include <asm/errno.h>
 #include <linux/cdev.h>
@@ -14,10 +12,9 @@
 #include <linux/string.h>  //memset
 #include "check.h"
 #include "file.h"
-#include "linux_in.h"
-#include "linux_netfilter.h"
-#include "linux_netfilter_ipv4.h"
-#include "module.h"
+#include "in.h"
+#include "netfilter.h"
+#include "netfilter_ipv4.h"
 
 unsigned int *deny_ip = NULL;
 unsigned short *deny_port = NULL;

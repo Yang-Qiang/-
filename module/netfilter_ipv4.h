@@ -1,15 +1,10 @@
-/* IPv4-specific defines for netfilter.
- * (C)1998 Rusty Russell -- This code is GPL.
- */
-#ifndef _UAPI__LINUX_IP_NETFILTER_H
-#define _UAPI__LINUX_IP_NETFILTER_H
 
-#include "linux_netfilter.h"
+#ifndef _NETFILTER_IPV4_H
+#define _NETFILTER__IPV4_H
 
-/* only for userspace compatibility */
-#ifndef __KERNEL__
+#include "netfilter.h"
 
-#include <limits.h> /* for INT_MIN, INT_MAX */
+#include "limits.h"  /* for INT_MIN, INT_MAX */
 
 /* IP Cache bits. */
 /* Src IP address. */
@@ -51,7 +46,6 @@
 /* Packets about to hit the wire. */
 #define NF_IP_POST_ROUTING 4
 #define NF_IP_NUMHOOKS 5
-#endif /* ! __KERNEL__ */
 
 enum nf_ip_hook_priorities {
     NF_IP_PRI_FIRST = INT_MIN,
@@ -70,10 +64,5 @@ enum nf_ip_hook_priorities {
     NF_IP_PRI_LAST = INT_MAX,
 };
 
-/* Arguments for setsockopt SOL_IP: */
-/* 2.0 firewalling went from 64 through 71 (and +256, +512, etc). */
-/* 2.2 firewalling (+ masq) went from 64 through 76 */
-/* 2.4 firewalling went 64 through 67. */
-#define SO_ORIGINAL_DST 80
 
-#endif /* _UAPI__LINUX_IP_NETFILTER_H */
+#endif /* LINUX_IP_NETFILTER_H */
