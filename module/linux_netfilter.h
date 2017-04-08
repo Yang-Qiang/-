@@ -9,7 +9,38 @@
 #include <linux/net.h>
 #include <linux/skbuff.h>
 #include <linux/wait.h>
-#include <uapi/linux/netfilter.h>
+#include <linux/types.h>
+#include <linux/compiler.h>
+#include <linux/sysctl.h>
+
+
+/* Responses from hook functions. */
+#define NF_DROP 0
+#define NF_ACCEPT 1
+#define NF_STOLEN 2
+#define NF_QUEUE 3
+#define NF_REPEAT 4
+
+enum nf_inet_hooks {
+	NF_INET_PRE_ROUTING,
+	NF_INET_LOCAL_IN,
+	NF_INET_FORWARD,
+	NF_INET_LOCAL_OUT,
+	NF_INET_POST_ROUTING,
+	NF_INET_NUMHOOKS
+};
+
+enum {
+	NFPROTO_UNSPEC =  0,
+	NFPROTO_INET   =  1,
+	NFPROTO_IPV4   =  2,
+	NFPROTO_ARP    =  3,
+	NFPROTO_BRIDGE =  7,
+	NFPROTO_IPV6   = 10,
+	NFPROTO_DECNET = 12,
+	NFPROTO_NUMPROTO,
+};
+
 #ifdef CONFIG_NETFILTER
 
 /* Largest hook number + 1 */
@@ -80,33 +111,6 @@ int nf_register_sockopt(struct nf_sockopt_ops *reg);
 void nf_unregister_sockopt(struct nf_sockopt_ops *reg);
 
 extern struct list_head nf_hooks[NFPROTO_NUMPROTO][NF_MAX_HOOKS];
-
-#if defined(CONFIG_JUMP_LABEL)
-#include <linux/static_key.h>
-extern struct static_key nf_hooks_needed[NFPROTO_NUMPROTO][NF_MAX_HOOKS];
-static inline bool nf_hooks_active(u_int8_t pf, unsigned int hook) {
-    if (__builtin_constant_p(pf) && __builtin_constant_p(hook))
-        return static_key_false(&nf_hooks_needed[pf][hook]);
-
-    return !list_empty(&nf_hooks[pf][hook]);
-}
-#else
-static inline bool nf_hooks_active(u_int8_t pf, unsigned int hook) {
-    return !list_empty(&nf_hooks[pf][hook]);
-}
-#endif
-
-int nf_hook_slow(struct sk_buff *skb, struct nf_hook_state *state);
-
-static inline int nf_hook(u_int8_t pf,
-                          unsigned int hook,
-                          struct sock *sk,
-                          struct sk_buff *skb,
-                          struct net_device *indev,
-                          struct net_device *outdev,
-                          int (*okfn)(struct sock *, struct sk_buff *)) {
-    return nf_hook_thresh(pf, hook, sk, skb, indev, outdev, okfn, INT_MIN);
-}
 
 #else  /* !CONFIG_NETFILTER */
 
