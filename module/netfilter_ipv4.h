@@ -1,13 +1,8 @@
-
 #ifndef _NETFILTER_IPV4_H
 #define _NETFILTER__IPV4_H
-
 #include "netfilter.h"
-
 #include "limits.h"  /* for INT_MIN, INT_MAX */
 
-/* IP Cache bits. */
-/* Src IP address. */
 #define NFC_IP_SRC 0x0001
 /* Dest IP address. */
 #define NFC_IP_DST 0x0002
@@ -63,6 +58,5 @@ enum nf_ip_hook_priorities {
     NF_IP_PRI_CONNTRACK_CONFIRM = INT_MAX,
     NF_IP_PRI_LAST = INT_MAX,
 };
-
 
 #endif /* LINUX_IP_NETFILTER_H */

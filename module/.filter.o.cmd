@@ -1,1 +1,0 @@
-cmd_/home/user/文档/firewall/module/filter.o := ld -m elf_x86_64   -r -o /home/user/文档/firewall/module/filter.o /home/user/文档/firewall/module/module.o /home/user/文档/firewall/module/file.o /home/user/文档/firewall/module/check.o ; scripts/mod/modpost /home/user/文档/firewall/module/filter.o

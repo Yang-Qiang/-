@@ -1,5 +1,5 @@
-#ifndef _UAPI_LINUX_NETFILTER_H
-#define _UAPI_LINUX_NETFILTER_H
+#ifndef _UAPI__LINUX_NETFILTER_H
+#define _UAPI__LINUX_NETFILTER_H
 
 #include <linux/if.h>
 #include <linux/in.h>
@@ -21,8 +21,6 @@
 #define NF_QUEUE 3
 #define NF_REPEAT 4
 
-#ifndef _UAPI_LINUX_NETFILTER_H
-#define _UAPI_LINUX_NETFILTER_H
 
 enum nf_inet_hooks {
 	NF_INET_PRE_ROUTING,
@@ -44,8 +42,8 @@ enum {
 	NFPROTO_NUMPROTO,
 };
 
-
-#ifdef CONFIG_NETFILTER
+#ifndef _LINUX_NETFILTER_H
+#define _LINUX_NETFILTER_H
 
 /* Largest hook number + 1 */
 #define NF_MAX_HOOKS 8
@@ -103,11 +101,6 @@ struct nf_hook_ops {
     int priority;
 };
 
-/* Function to register/unregister hook points. */
-int nf_register_hook(struct nf_hook_ops *reg);
-void nf_unregister_hook(struct nf_hook_ops *reg);
-int nf_register_hooks(struct nf_hook_ops *reg, unsigned int n);
-void nf_unregister_hooks(struct nf_hook_ops *reg, unsigned int n);
 
 /* Functions to register get/setsockopt ranges (non-inclusive).  You
    need to check permissions yourself! */
@@ -115,8 +108,6 @@ int nf_register_sockopt(struct nf_sockopt_ops *reg);
 void nf_unregister_sockopt(struct nf_sockopt_ops *reg);
 
 extern struct list_head nf_hooks[NFPROTO_NUMPROTO][NF_MAX_HOOKS];
-
-#else  /* !CONFIG_NETFILTER */
 
 static inline int nf_hook(u_int8_t pf,
                           unsigned int hook,
@@ -127,9 +118,6 @@ static inline int nf_hook(u_int8_t pf,
                           int (*okfn)(struct sock *, struct sk_buff *)) {
     return 1;
 }
-#endif /*CONFIG_NETFILTER*/
 
-#endif /* __LINUX_NETFILTER_H */
-
-
+#endif /* _UAPI_LINUX_NETFILTER_H */
 #endif

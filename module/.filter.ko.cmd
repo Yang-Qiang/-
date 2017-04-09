@@ -1,1 +1,0 @@
-cmd_/home/user/文档/firewall/module/filter.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/user/文档/firewall/module/filter.ko /home/user/文档/firewall/module/filter.o /home/user/文档/firewall/module/filter.mod.o
