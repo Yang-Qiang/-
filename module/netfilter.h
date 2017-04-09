@@ -63,9 +63,6 @@ struct nf_hook_state {
     struct net_device *out;
     struct sock *sk;
     int (*okfn)(struct sock *, struct sk_buff *);
-    /* RHEL: this structure can be extended by adding new fields below
-     * this point. Any user of such new field has to check the 'size'
-     * field first to determine whether the field is present. */
 };
 
 static inline void nf_hook_state_init(struct nf_hook_state *p,
@@ -90,20 +87,15 @@ typedef unsigned int nf_hookfn(const struct nf_hook_ops *ops,
 
 struct nf_hook_ops {
     struct list_head list;
-
-    /* User fills in from here down. */
     nf_hookfn *hook;
     struct module *owner;
     void *priv;
     u_int8_t pf;
     unsigned int hooknum;
-    /* Hooks are ordered in ascending priority. */
     int priority;
 };
 
 
-/* Functions to register get/setsockopt ranges (non-inclusive).  You
-   need to check permissions yourself! */
 int nf_register_sockopt(struct nf_sockopt_ops *reg);
 void nf_unregister_sockopt(struct nf_sockopt_ops *reg);
 
@@ -119,5 +111,5 @@ static inline int nf_hook(u_int8_t pf,
     return 1;
 }
 
-#endif /* _UAPI_LINUX_NETFILTER_H */
+#endif /* _LINUX_NETFILTER_H */
 #endif
