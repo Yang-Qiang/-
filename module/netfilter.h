@@ -1,6 +1,5 @@
-
-#ifndef _LINUX_NETFILTER_H
-#define _LINUX_NETFILTER_H
+#ifndef _UAPI__LINUX_NETFILTER_H
+#define _UAPI__LINUX_NETFILTER_H
 
 #include <linux/compiler.h>
 #include <linux/if.h>
@@ -21,8 +20,6 @@
 #define NF_QUEUE 3
 #define NF_REPEAT 4
 
-#ifndef _UAPI__LINUX_NETFILTER_H
-#define _UAPI__LINUX_NETFILTER_H
 enum nf_inet_hooks {
     NF_INET_PRE_ROUTING,
     NF_INET_LOCAL_IN,
@@ -42,7 +39,9 @@ enum {
     NFPROTO_DECNET = 12,
     NFPROTO_NUMPROTO,
 };
-#endif /*_UAPI__LINUX_NETFILTER_H */
+
+#ifndef _LINUX_NETFILTER_H
+#define _LINUX_NETFILTER_H
 
 /* Largest hook number + 1 */
 #define NF_MAX_HOOKS 8
@@ -109,4 +108,5 @@ static inline int nf_hook(u_int8_t pf,
     return 1;
 }
 
+#endif /* _LINUX_NETFILTER_H */
 #endif
