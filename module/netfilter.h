@@ -1,5 +1,5 @@
-#ifndef _NETFILTER_H
-#define _NETFILTER_H
+#ifndef _UAPI_LINUX_NETFILTER_H
+#define _UAPI_LINUX_NETFILTER_H
 
 #include <linux/if.h>
 #include <linux/in.h>
@@ -13,12 +13,16 @@
 #include <linux/sysctl.h>
 #include <linux/kernel.h>
 
+
 /* Responses from hook functions. */
 #define NF_DROP 0
 #define NF_ACCEPT 1
 #define NF_STOLEN 2
 #define NF_QUEUE 3
 #define NF_REPEAT 4
+
+#ifndef _UAPI_LINUX_NETFILTER_H
+#define _UAPI_LINUX_NETFILTER_H
 
 enum nf_inet_hooks {
 	NF_INET_PRE_ROUTING,
@@ -39,6 +43,7 @@ enum {
 	NFPROTO_DECNET = 12,
 	NFPROTO_NUMPROTO,
 };
+
 
 #ifdef CONFIG_NETFILTER
 
@@ -125,3 +130,6 @@ static inline int nf_hook(u_int8_t pf,
 #endif /*CONFIG_NETFILTER*/
 
 #endif /* __LINUX_NETFILTER_H */
+
+
+#endif
