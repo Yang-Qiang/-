@@ -1,18 +1,18 @@
-#ifndef _UAPI__LINUX_NETFILTER_H
-#define _UAPI__LINUX_NETFILTER_H
 
+#ifndef _LINUX_NETFILTER_H
+#define _LINUX_NETFILTER_H
+
+#include <linux/compiler.h>
 #include <linux/if.h>
 #include <linux/in.h>
 #include <linux/init.h>
+#include <linux/kernel.h>
 #include <linux/list.h>
 #include <linux/net.h>
 #include <linux/skbuff.h>
-#include <linux/wait.h>
-#include <linux/types.h>
-#include <linux/compiler.h>
 #include <linux/sysctl.h>
-#include <linux/kernel.h>
-
+#include <linux/types.h>
+#include <linux/wait.h>
 
 /* Responses from hook functions. */
 #define NF_DROP 0
@@ -21,29 +21,28 @@
 #define NF_QUEUE 3
 #define NF_REPEAT 4
 
-
+#ifndef _UAPI__LINUX_NETFILTER_H
+#define _UAPI__LINUX_NETFILTER_H
 enum nf_inet_hooks {
-	NF_INET_PRE_ROUTING,
-	NF_INET_LOCAL_IN,
-	NF_INET_FORWARD,
-	NF_INET_LOCAL_OUT,
-	NF_INET_POST_ROUTING,
-	NF_INET_NUMHOOKS
+    NF_INET_PRE_ROUTING,
+    NF_INET_LOCAL_IN,
+    NF_INET_FORWARD,
+    NF_INET_LOCAL_OUT,
+    NF_INET_POST_ROUTING,
+    NF_INET_NUMHOOKS
 };
 
 enum {
-	NFPROTO_UNSPEC =  0,
-	NFPROTO_INET   =  1,
-	NFPROTO_IPV4   =  2,
-	NFPROTO_ARP    =  3,
-	NFPROTO_BRIDGE =  7,
-	NFPROTO_IPV6   = 10,
-	NFPROTO_DECNET = 12,
-	NFPROTO_NUMPROTO,
+    NFPROTO_UNSPEC = 0,
+    NFPROTO_INET = 1,
+    NFPROTO_IPV4 = 2,
+    NFPROTO_ARP = 3,
+    NFPROTO_BRIDGE = 7,
+    NFPROTO_IPV6 = 10,
+    NFPROTO_DECNET = 12,
+    NFPROTO_NUMPROTO,
 };
-
-#ifndef _LINUX_NETFILTER_H
-#define _LINUX_NETFILTER_H
+#endif /*_UAPI__LINUX_NETFILTER_H */
 
 /* Largest hook number + 1 */
 #define NF_MAX_HOOKS 8
@@ -95,7 +94,6 @@ struct nf_hook_ops {
     int priority;
 };
 
-
 int nf_register_sockopt(struct nf_sockopt_ops *reg);
 void nf_unregister_sockopt(struct nf_sockopt_ops *reg);
 
@@ -111,5 +109,4 @@ static inline int nf_hook(u_int8_t pf,
     return 1;
 }
 
-#endif /* _LINUX_NETFILTER_H */
 #endif
